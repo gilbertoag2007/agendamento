@@ -33,7 +33,6 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		profissional.setId(dto.getId());
 		profissional.setNome(dto.getNome());
 		profissional.setCpf(dto.getCpf());
-		profissional.setFuncao(dto.getFuncao());
 		profissional.setLogin(dto.getLogin());
 		profissional.setSenha(dto.getSenha());
 		
@@ -60,7 +59,6 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		dto.setId(prof.getId());
 		dto.setNome(prof.getNome());
 		dto.setCpf(prof.getCpf());
-		dto.setFuncao(prof.getFuncao());
 		dto.setLogin(prof.getLogin());
 		dto.setSenha(prof.getSenha());
 		dto.setDataInclusao(String.valueOf(prof.getDataInclusao()));
@@ -73,23 +71,12 @@ public class MapeadorDtoImpl implements MapeadorDto {
 	public Disponibilidade disponibilidadeDtoToDisponibilidade(DisponibilidadeDTO dto) {
 		Disponibilidade dispo = new Disponibilidade();
 		dispo.setId(dto.getId());
-		
-		DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate localDate = LocalDate.parse(dto.getDataMarcacao(), FOMATTER);
-				 
-				System.out.println(localDate);
-				//Get formatted String
-				String dateString = FOMATTER.format(localDate);
-				 
-				System.out.println(dateString);   //07/15/2018
-		
+		dispo.setFuncao(dto.getFuncao());
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate marcacao = LocalDate.parse(dto.getDataMarcacao(), formatter);
-		marcacao.format(formatter);
-		dispo.setDataMarcacao(marcacao);
+		dispo.setDataDisponibilidade(LocalDate.parse(dto.getDataDisponibilidade(), formatter));
 		
 		dispo.setIntervaloMinutos(dto.getIntervaloMinutos());
-		dispo.setProfissional(profissionalRepository.pesquisarPorID(dto.getProfissional()));
+		dispo.setProfissional(profissionalRepository.pesquisarPorID(dto.getIdProfissional()));
 		
 		if (dto.getHoraInicial() == null || dto.getHoraInicial().isEmpty()) {
 			dispo.setHoraInicial(LocalTime.now());
@@ -114,15 +101,19 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		
 		DisponibilidadeDTO dto = new DisponibilidadeDTO();
 		dto.setId(disponibilidade.getId());
-		dto.setDataMarcacao(disponibilidade.getDataMarcacao().toString());
+		dto.setFuncao(disponibilidade.getFuncao());
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		String dataFormatada = formatter.format(disponibilidade.getDataDisponibilidade());
+		
+		dto.setDataDisponibilidade(dataFormatada);
 		dto.setHoraInicial(String.valueOf(disponibilidade.getHoraInicial()));
 		dto.setHoraFinal(String.valueOf(disponibilidade.getHoraFinal()));
 		dto.setIntervaloMinutos(disponibilidade.getIntervaloMinutos());
 		
 		if (disponibilidade.getProfissional() != null) {
-			dto.setProfissional(disponibilidade.getProfissional().getId());
+			dto.setIdProfissional(disponibilidade.getProfissional().getId());
+			dto.setNomeProfissional(disponibilidade.getProfissional().getNome());
 		}
-		
 		
 		return dto;
 	}

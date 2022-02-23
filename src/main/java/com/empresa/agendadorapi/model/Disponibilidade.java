@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 /**
  * Classe com informacoes das disponibilidades dos profissionais em uma data
@@ -19,10 +20,14 @@ public class Disponibilidade {
 	@Id
 	private String id;
 	
+	@DocumentReference
 	private Profissional profissional;
 	/* Data da disponibilidade do profissional */
 	
-	private LocalDate dataMarcacao;
+	/* funcao exercida pelo profissional na data de disponibilidade*/
+	private String funcao;
+	
+	private LocalDate dataDisponibilidade;
 	/* Hora do inicio do atendimento dentro da data */
 	
 	private LocalTime horaInicial;
@@ -49,12 +54,20 @@ public class Disponibilidade {
 		this.profissional = profissional;
 	}
 
-	public LocalDate getDataMarcacao() {
-		return dataMarcacao;
+	public String getFuncao() {
+		return funcao;
 	}
 
-	public void setDataMarcacao(LocalDate dataMarcacao) {
-		this.dataMarcacao = dataMarcacao;
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
+	public LocalDate getDataDisponibilidade() {
+		return dataDisponibilidade;
+	}
+
+	public void setDataDisponibilidade(LocalDate dataDisponibilidade) {
+		this.dataDisponibilidade = dataDisponibilidade;
 	}
 
 	public LocalTime getHoraInicial() {
@@ -80,17 +93,17 @@ public class Disponibilidade {
 	public void setIntervaloMinutos(Integer intervaloMinutos) {
 		this.intervaloMinutos = intervaloMinutos;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Disponibilidade [id=" + id + ", profissional=" + profissional + ", dataMarcacao=" + dataMarcacao
-				+ ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + ", intervaloMinutos=" + intervaloMinutos
-				+ "]";
+		return "Disponibilidade [id=" + id + ", profissional=" + profissional + ", funcao=" + funcao
+				+ ", dataDisponibilidade=" + dataDisponibilidade + ", horaInicial=" + horaInicial + ", horaFinal="
+				+ horaFinal + ", intervaloMinutos=" + intervaloMinutos + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dataMarcacao, horaFinal, horaInicial, id, intervaloMinutos, profissional);
+		return Objects.hash(dataDisponibilidade, funcao, horaFinal, horaInicial, id, intervaloMinutos, profissional);
 	}
 
 	@Override
@@ -102,11 +115,12 @@ public class Disponibilidade {
 		if (getClass() != obj.getClass())
 			return false;
 		Disponibilidade other = (Disponibilidade) obj;
-		return Objects.equals(dataMarcacao, other.dataMarcacao) && Objects.equals(horaFinal, other.horaFinal)
-				&& Objects.equals(horaInicial, other.horaInicial) && Objects.equals(id, other.id)
-				&& Objects.equals(intervaloMinutos, other.intervaloMinutos)
+		return Objects.equals(dataDisponibilidade, other.dataDisponibilidade) && Objects.equals(funcao, other.funcao)
+				&& Objects.equals(horaFinal, other.horaFinal) && Objects.equals(horaInicial, other.horaInicial)
+				&& Objects.equals(id, other.id) && Objects.equals(intervaloMinutos, other.intervaloMinutos)
 				&& Objects.equals(profissional, other.profissional);
 	}
 
+	
 	
 }

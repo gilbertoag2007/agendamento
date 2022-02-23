@@ -3,6 +3,7 @@ package com.empresa.agendadorapi.service;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +27,13 @@ public class DisponibilidadeService {
 		
 	@Autowired
 	DisponibilidadeRepository disponibilidadeRepository;
+	
+	
 		
 	public DisponibilidadeDTO incluirDisponibilidade(DisponibilidadeDTO dto) {
 			
 		Disponibilidade dispo =  mapeadorDto.disponibilidadeDtoToDisponibilidade(dto);
 		disponibilidadeRepository.save(dispo);
-				
 		return mapeadorDto.disponibilidadeToDisponibilidadeDto(dispo);
 	}
 		

@@ -8,10 +8,7 @@ public class ProfissionalDTO {
 	
 	/* Nome do professional*/
 	private String nome;
-	
-	/* Funcao que o profissional exerce*/
-	private String funcao;
-	
+		
 	/* CPF do professional*/
 	private String cpf;
 	
@@ -41,14 +38,6 @@ public class ProfissionalDTO {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String getFuncao() {
-		return funcao;
-	}
-
-	public void setFuncao(String funcao) {
-		this.funcao = funcao;
 	}
 
 	public String getCpf() {
@@ -93,14 +82,13 @@ public class ProfissionalDTO {
 
 	@Override
 	public String toString() {
-		return "ProfissionalDTO [id=" + id + ", nome=" + nome + ", funcao=" + funcao + ", cpf=" + cpf + ", login="
-				+ login + ", senha=" + senha + ", dataInclusao=" + dataInclusao + ", dataExclusao=" + dataExclusao
-				+ "]";
+		return "ProfissionalDTO [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", login=" + login + ", senha=" + senha
+				+ ", dataInclusao=" + dataInclusao + ", dataExclusao=" + dataExclusao + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cpf, dataExclusao, dataInclusao, funcao, id, login, nome, senha);
+		return Objects.hash(cpf, dataExclusao, dataInclusao, id, login, nome, senha);
 	}
 
 	@Override
@@ -113,9 +101,9 @@ public class ProfissionalDTO {
 			return false;
 		ProfissionalDTO other = (ProfissionalDTO) obj;
 		return Objects.equals(cpf, other.cpf) && Objects.equals(dataExclusao, other.dataExclusao)
-				&& Objects.equals(dataInclusao, other.dataInclusao) && Objects.equals(funcao, other.funcao)
-				&& Objects.equals(id, other.id) && Objects.equals(login, other.login)
-				&& Objects.equals(nome, other.nome) && Objects.equals(senha, other.senha);
+				&& Objects.equals(dataInclusao, other.dataInclusao) && Objects.equals(id, other.id)
+				&& Objects.equals(login, other.login) && Objects.equals(nome, other.nome)
+				&& Objects.equals(senha, other.senha);
 	}
 
 	

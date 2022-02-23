@@ -9,11 +9,17 @@ public class DisponibilidadeDTO {
 	@Id
 	private String id;
 	
-	/* profissional */
-	private String profissional;
+	/* id do profissional */
+	private String idProfissional;
+	
+	/* nome do profissional */
+	private String nomeProfissional;
+	
+	/* funcao do profissional na qual ele estara disponivel*/
+	private String funcao;
 	
 	/* Data da disponibilidade do profissional */
-	private String dataMarcacao;
+	private String dataDisponibilidade;
 	/* Hora do inicio do atendimento dentro da data */
 	
 	private String horaInicial;
@@ -32,20 +38,36 @@ public class DisponibilidadeDTO {
 		this.id = id;
 	}
 
-	public String getProfissional() {
-		return profissional;
+	public String getIdProfissional() {
+		return idProfissional;
 	}
 
-	public void setProfissional(String profissional) {
-		this.profissional = profissional;
+	public void setIdProfissional(String idProfissional) {
+		this.idProfissional = idProfissional;
 	}
 
-	public String getDataMarcacao() {
-		return dataMarcacao;
+	public String getNomeProfissional() {
+		return nomeProfissional;
 	}
 
-	public void setDataMarcacao(String dataMarcacao) {
-		this.dataMarcacao = dataMarcacao;
+	public void setNomeProfissional(String nomeProfissional) {
+		this.nomeProfissional = nomeProfissional;
+	}
+
+	public String getFuncao() {
+		return funcao;
+	}
+
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
+	}
+
+	public String getDataDisponibilidade() {
+		return dataDisponibilidade;
+	}
+
+	public void setDataDisponibilidade(String dataDisponibilidade) {
+		this.dataDisponibilidade = dataDisponibilidade;
 	}
 
 	public String getHoraInicial() {
@@ -72,17 +94,16 @@ public class DisponibilidadeDTO {
 		this.intervaloMinutos = intervaloMinutos;
 	}
 
-	
 	@Override
 	public String toString() {
-		return "DisponibilidadeDTO [id=" + id + ", profissional=" + profissional + ", dataMarcacao=" + dataMarcacao
-				+ ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal + ", intervaloMinutos=" + intervaloMinutos
-				+ "]";
+		return "DisponibilidadeDTO [id=" + id + ", idProfissional=" + idProfissional + ", nomeProfissional="
+				+ nomeProfissional + ", funcao=" + funcao + ", dataDisponibilidade=" + dataDisponibilidade + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(dataMarcacao, horaFinal, horaInicial, id, intervaloMinutos, profissional);
+		return Objects.hash(dataDisponibilidade, funcao, horaFinal, horaInicial, id, idProfissional, intervaloMinutos,
+				nomeProfissional);
 	}
 
 	@Override
@@ -94,10 +115,12 @@ public class DisponibilidadeDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		DisponibilidadeDTO other = (DisponibilidadeDTO) obj;
-		return Objects.equals(dataMarcacao, other.dataMarcacao) && Objects.equals(horaFinal, other.horaFinal)
-				&& Objects.equals(horaInicial, other.horaInicial) && Objects.equals(id, other.id)
+		return Objects.equals(dataDisponibilidade, other.dataDisponibilidade) && Objects.equals(funcao, other.funcao)
+				&& Objects.equals(horaFinal, other.horaFinal) && Objects.equals(horaInicial, other.horaInicial)
+				&& Objects.equals(id, other.id) && Objects.equals(idProfissional, other.idProfissional)
 				&& Objects.equals(intervaloMinutos, other.intervaloMinutos)
-				&& Objects.equals(profissional, other.profissional);
+				&& Objects.equals(nomeProfissional, other.nomeProfissional);
 	}
+
 	
 }
