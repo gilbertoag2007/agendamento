@@ -1,20 +1,65 @@
 package com.empresa.agendadorapi.repository;
 
 import java.util.List;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
 import com.empresa.agendadorapi.model.Disponibilidade;
 import com.empresa.agendadorapi.model.Profissional;
 
-public interface DisponibilidadeRepository extends MongoRepository<Disponibilidade, String> {
+/**
+ * 
+ * Classe de conexao com o MongoDB para manter disponibilidade.
+ *  
+ * @author Gilberto Cunha
+ *
+ */
 
-	@Query("{id:'?0'}")
-	Disponibilidade pesquisarPorID(String id);
+@Component
+public class DisponibilidadeRepository {
+
+	@Autowired
+	MongoTemplate mongoTemplate;	
+
+	public Disponibilidade incluirDisponibilidade (Disponibilidade dispo) {
+		Disponibilidade disponibilidade = mongoTemplate.save(dispo);
+		return disponibilidade;
+	}
 	
-	@Query("{dataMarcacao:'?0'}")
-	List<Disponibilidade> pesquisarPorData(String data);
+	public List<Disponibilidade> pesquisarPorProfissinal(Profissional profissional){
+		
+		Query query = new Query();
+		query.addCriteria(Criteria.where("profissional").is(profissional));
+		List<Disponibilidade> dispoBanco = mongoTemplate.find(query, Disponibilidade.class);
+		
+		return dispoBanco;
+	}  
 	
-	@Query("{profissional:'?0'}")
-	List<Disponibilidade> pesquisarPorProfissional(Profissional profissional);
+	public List<Disponibilidade> listarTodos(){
+		List<Disponibilidade> dispoBanco = mongoTemplate.findAll(Disponibilidade.class);
+		
+		return dispoBanco;
+	}  
+	
+	public void atualizarDisponibilidade(Disponibilidade dispo) {
+		mongoTemplate.save(dispo);
+			
+	}
+	
+	public void deletarDisponibilidade (String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(id));
+		mongoTemplate.findAndRemove(query, Disponibilidade.class);
+		
+	}
+	
+	public Disponibilidade pesquisarPorId(String id) {
+		Disponibilidade dispo = mongoTemplate.findById(id, Disponibilidade.class);
+		return dispo;
+	}
+	
 }

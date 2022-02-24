@@ -2,15 +2,16 @@ package com.empresa.agendadorapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.empresa.agendadorapi.dto.DisponibilidadeDTO;
 import com.empresa.agendadorapi.dto.mapper.MapeadorDto;
 import com.empresa.agendadorapi.model.Disponibilidade;
+import com.empresa.agendadorapi.model.Profissional;
 import com.empresa.agendadorapi.repository.DisponibilidadeRepository;
+import com.empresa.agendadorapi.repository.ProfissionalRepository;
 
 /**
  * 
@@ -24,23 +25,24 @@ public class DisponibilidadeService {
 
 	@Autowired
 	MapeadorDto mapeadorDto;
-		
+	
 	@Autowired
-	DisponibilidadeRepository disponibilidadeRepository;
+	DisponibilidadeRepository disponibilidadeTemplate;
 	
-	
+	@Autowired
+	ProfissionalRepository profissionalRepository;
 		
 	public DisponibilidadeDTO incluirDisponibilidade(DisponibilidadeDTO dto) {
 			
 		Disponibilidade dispo =  mapeadorDto.disponibilidadeDtoToDisponibilidade(dto);
-		disponibilidadeRepository.save(dispo);
-		return mapeadorDto.disponibilidadeToDisponibilidadeDto(dispo);
+		Disponibilidade dispo2 = disponibilidadeTemplate.incluirDisponibilidade(dispo);		
+		return mapeadorDto.disponibilidadeToDisponibilidadeDto(dispo2);
 	}
 		
 	
 	public List<DisponibilidadeDTO> listarTodos(){
 			
-		List <Disponibilidade> dispoBanco = disponibilidadeRepository.findAll();
+		List <Disponibilidade> dispoBanco = disponibilidadeTemplate.listarTodos();
 		List<DisponibilidadeDTO> disponibilidadesDTO  = new ArrayList<DisponibilidadeDTO>();  
 			
 			for (Disponibilidade dispo: dispoBanco ) {
@@ -52,22 +54,36 @@ public class DisponibilidadeService {
 	}
 		
 	public void atualizarDisponibilidade(DisponibilidadeDTO dto) {
-			
 		Disponibilidade disponibilidade = mapeadorDto.disponibilidadeDtoToDisponibilidade(dto);
-		disponibilidadeRepository.save(disponibilidade);
-
+		disponibilidadeTemplate.atualizarDisponibilidade(disponibilidade);
 	}
 		
 	public void deletarDisponibilidade(String id) {
-		disponibilidadeRepository.deleteById(id);
+		disponibilidadeTemplate.deletarDisponibilidade(id);
 	}
 		
 	public DisponibilidadeDTO pesquisarPorId (String id) {
 			
-		Disponibilidade dispo = disponibilidadeRepository.pesquisarPorID(id);
+		Disponibilidade dispo = disponibilidadeTemplate.pesquisarPorId(id);
 		DisponibilidadeDTO dto = mapeadorDto.disponibilidadeToDisponibilidadeDto(dispo); 
 		
 		return dto;
+	}
+	
+	public List<DisponibilidadeDTO> pesquisarPorProfissional(String id) {
+		
+		Profissional prof = profissionalRepository.pesquisarPorId(id);
+		
+		
+		List<Disponibilidade> dispoBanco = disponibilidadeTemplate.pesquisarPorProfissinal(prof);
+		List<DisponibilidadeDTO> disponibilidadesDTO  = new ArrayList<DisponibilidadeDTO>();  
+		
+		for (Disponibilidade dispo: dispoBanco ) {
+			DisponibilidadeDTO dispoDTO = mapeadorDto.disponibilidadeToDisponibilidadeDto(dispo);
+			disponibilidadesDTO.add(dispoDTO);						
+		}
+		
+		return disponibilidadesDTO;
 	}
 	
 }

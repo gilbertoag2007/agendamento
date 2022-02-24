@@ -1,6 +1,7 @@
 package com.empresa.agendadorapi.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,50 +13,61 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.empresa.agendadorapi.dto.ProfissionalDTO;
-import com.empresa.agendadorapi.service.ProfissionalService;
+
+import com.empresa.agendadorapi.dto.AgendamentoDTO;
+import com.empresa.agendadorapi.service.AgendamentoService;
 
 @RestController
-@RequestMapping("/profissionais")
-public class ProfissionalController {
+@RequestMapping("/agendamentos")
+public class AgendamentoController {
+	
 	
 	@Autowired
-	ProfissionalService profissionalService;
+	AgendamentoService agendamentoService;
+	
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProfissionalDTO incluirProfissional(@RequestBody ProfissionalDTO profDTO) {
-		return profissionalService.incluirProfissional(profDTO);
+	public AgendamentoDTO incluirAgendamento(@RequestBody AgendamentoDTO agendaDTO) {
+		
+		return agendamentoService.incluirAgendamento(agendaDTO);
 	}
 	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProfissionalDTO> listarTodos(){
+	public List<AgendamentoDTO> listarTodos(){
 
-		return profissionalService.listarTodos();
-		
+		return agendamentoService.listarTodos();
 	}
 	
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void atualizarProfissional(@RequestBody ProfissionalDTO profDTO) {
+	public void atualizarAgendamento(@RequestBody AgendamentoDTO agendaDTO) {
 	
-		profissionalService.atualizarProfissional(profDTO);
+		agendamentoService.atualizarAgendamento(agendaDTO);
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deletar(@PathVariable String id) {
-		profissionalService.deletarProfisisonal(id);
-	
+		
+		agendamentoService.deletarAgendamento(id);
 	}
 	
 	@GetMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.FOUND)
-	public ProfissionalDTO pesquisarPorId(@PathVariable String id) {
+	@ResponseStatus(HttpStatus.OK)
+	public AgendamentoDTO pesquisarPorId(@PathVariable String id) {
 		
-		return profissionalService.pesquisarPorId(id);
-		
+		return agendamentoService.pesquisarPorId(id);
 	}
 	
+	@GetMapping(value = "data/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public List<AgendamentoDTO> pesquisarPorData(@PathVariable String data) {
+		
+		return agendamentoService.pesquisarPorData(data);
+	}
+	
+	
+
 }

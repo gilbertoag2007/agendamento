@@ -59,4 +59,11 @@ public class DisponibilidadeController {
 		return disponibilidadeService.pesquisarPorId(id);
 	}
 	
+	@GetMapping(value = "profissional/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public List<DisponibilidadeDTO> pesquisarPorProfissional(@PathVariable String id) {
+		
+		return disponibilidadeService.pesquisarPorProfissional(id);
+	}
+	
 }

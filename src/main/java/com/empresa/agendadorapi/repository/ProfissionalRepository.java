@@ -1,16 +1,55 @@
 package com.empresa.agendadorapi.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
 import com.empresa.agendadorapi.model.Profissional;
 
-public interface ProfissionalRepository extends MongoRepository<Profissional, String> {
+/**
+ * 
+ * Classe de conexao com o MongoDB para manter profissional.
+ *  
+ * @author Gilberto Cunha
+ *
+ */
 
-	@Query("{id:'?0'}")
-	Profissional pesquisarPorID(String id);
+@Component
+public class ProfissionalRepository {
+
+	@Autowired
+	MongoTemplate mongoTemplate;	
+
+	public Profissional incluirProfissional (Profissional prof) {
+		Profissional profissional = mongoTemplate.save(prof);
+		return profissional;
+	}
 	
-	@Query("{login:'?0'}")
-	Profissional pesquisarPorLogin(String login);
+	public List<Profissional> listarTodos(){
+		List<Profissional> dispoBanco = mongoTemplate.findAll(Profissional.class);
+		
+		return dispoBanco;
+	}  
+	
+	public void atualizarProfissional(Profissional profissional) {
+		mongoTemplate.save(profissional);
+			
+	}
+	
+	public void deletarProfissional (String id) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(id));
+		mongoTemplate.findAndRemove(query, Profissional.class);
+		
+	}
+	
+	public Profissional pesquisarPorId(String id) {
+		Profissional profissional = mongoTemplate.findById(id, Profissional.class);
+		return profissional;
+	}
 	
 }

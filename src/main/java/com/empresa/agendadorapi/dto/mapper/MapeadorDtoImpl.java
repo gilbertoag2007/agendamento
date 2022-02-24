@@ -4,16 +4,21 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.processing.Generated;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.empresa.agendadorapi.dto.AgendamentoDTO;
 import com.empresa.agendadorapi.dto.DisponibilidadeDTO;
 import com.empresa.agendadorapi.dto.ProfissionalDTO;
+import com.empresa.agendadorapi.model.Agendamento;
 import com.empresa.agendadorapi.model.Disponibilidade;
 import com.empresa.agendadorapi.model.Profissional;
+import com.empresa.agendadorapi.repository.DisponibilidadeRepository;
 import com.empresa.agendadorapi.repository.ProfissionalRepository;
 
 /*
@@ -25,6 +30,9 @@ public class MapeadorDtoImpl implements MapeadorDto {
 
 	@Autowired
 	ProfissionalRepository profissionalRepository;
+	
+	@Autowired
+	DisponibilidadeRepository disponibilidadeRepository;
 	
 	@Override
 	public Profissional profissionalDtoToProfissional(ProfissionalDTO dto) {
@@ -76,7 +84,7 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		dispo.setDataDisponibilidade(LocalDate.parse(dto.getDataDisponibilidade(), formatter));
 		
 		dispo.setIntervaloMinutos(dto.getIntervaloMinutos());
-		dispo.setProfissional(profissionalRepository.pesquisarPorID(dto.getIdProfissional()));
+		dispo.setProfissional(profissionalRepository.pesquisarPorId(dto.getIdProfissional()));
 		
 		if (dto.getHoraInicial() == null || dto.getHoraInicial().isEmpty()) {
 			dispo.setHoraInicial(LocalTime.now());
@@ -114,6 +122,95 @@ public class MapeadorDtoImpl implements MapeadorDto {
 			dto.setIdProfissional(disponibilidade.getProfissional().getId());
 			dto.setNomeProfissional(disponibilidade.getProfissional().getNome());
 		}
+		
+		
+		return dto;
+	}
+
+	@Override
+	public Agendamento agendamentoDtoToAgendamento(AgendamentoDTO agendaDto) {
+		Agendamento agenda = new Agendamento();
+		agenda.setId(agendaDto.getId());
+		
+		
+		if(agendaDto.getData() != null) {
+			DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			agenda.setData(LocalDate.parse(agendaDto.getData(),formatData));	
+			
+		}
+		
+		DateTimeFormatter formatDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		if(agendaDto.getDataAbertura() != null) {
+			agenda.setDataAbertura(LocalDateTime.parse(agendaDto.getDataAbertura(), formatDataHora));
+			
+		}
+		
+		if(agendaDto.getDataFechamento() != null ) {
+			if (!agendaDto.getDataFechamento().isEmpty()) {
+				agenda.setDataFechamento(LocalDateTime.parse(agendaDto.getDataFechamento(), formatDataHora));
+			}
+		}
+	
+		agenda.setAberta(agendaDto.getAberta());
+		
+		if(agendaDto.getHoraInicial() != null) {
+			agenda.setHoraInicial(LocalTime.parse(agendaDto.getHoraInicial()));
+		}
+		
+		if(agendaDto.getHoraFinal() != null) {
+			agenda.setHoraFinal(null);
+		}
+		
+		if(agendaDto.getDisponibilidades() != null) {
+			List<Disponibilidade> disponibilidades = new ArrayList<Disponibilidade>();
+			
+					for (DisponibilidadeDTO dispDTO: agendaDto.getDisponibilidades()) {
+						Disponibilidade dispo = disponibilidadeRepository.pesquisarPorId(dispDTO.getId());
+						disponibilidades.add(dispo);
+					}
+		agenda.setDisponibilidades(disponibilidades);
+		}
+		
+		return agenda;
+	}
+
+	@Override
+	public AgendamentoDTO agendamentoToAgendamentoDto(Agendamento agendamento) {
+	
+		AgendamentoDTO dto = new AgendamentoDTO();
+		dto.setId(agendamento.getId());
+		
+		DateTimeFormatter formatData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+		
+		if(agendamento.getData() != null) {
+			dto.setData(formatData.format(agendamento.getData()));
+		}
+		if(agendamento.getDataAbertura() != null) {
+			dto.setDataAbertura(formatDataHora.format(agendamento.getDataAbertura()));
+		
+		}
+		if(agendamento.getDataFechamento() != null){
+			dto.setDataFechamento(formatDataHora.format(agendamento.getDataFechamento()));
+			
+		}
+		
+		dto.setAberta(agendamento.getAberta());
+		dto.setHoraInicial(String.valueOf(agendamento.getHoraInicial()));
+		dto.setHoraFinal(String.valueOf(agendamento.getHoraFinal()));
+		
+		if(agendamento.getDisponibilidades() != null) {
+			List<DisponibilidadeDTO> dispoDTOs = new ArrayList<DisponibilidadeDTO>();
+			
+			for (Disponibilidade dispo: agendamento.getDisponibilidades()) {
+				
+				DisponibilidadeDTO dispoDto = disponibilidadeToDisponibilidadeDto(dispo);
+				dispoDTOs.add(dispoDto);
+			}
+			
+			dto.setDisponibilidades(dispoDTOs);
+		}
+		
 		
 		return dto;
 	}

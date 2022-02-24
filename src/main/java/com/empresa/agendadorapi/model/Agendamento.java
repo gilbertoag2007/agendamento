@@ -1,8 +1,13 @@
 package com.empresa.agendadorapi.model;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Classe com informacoes de um dia dentro da agenda.
@@ -10,119 +15,109 @@ import java.util.Objects;
  * @author Gilberto Cunha
  *
  */
-public class Agenda {
 
+@Document("agendamento")
+public class Agendamento {
 
-  private Long id;
+  @Id
+  private String id;
   
   /*Data dentro da agenda */
-  private Calendar data;
+  private LocalDate data;
   
   /* hora de inicial das atividades */
-  private String horaInicial;
+  private LocalTime horaInicial;
   
   /* Hora final das atividades*/
-  private String horaFinal;  
+  private LocalTime horaFinal;  
   
-  /*Indica se a data já está aberta para marcacoes */
-  private Character aberta;
+  /*Indica se a data  esta aberta para marcacoes. 1=SIM  2=NAO  */
+  private Integer aberta;
   
   /* Data que a agenda foi aberta para marcacoes */
-  private Calendar dataAbertura;
+  private LocalDateTime dataAbertura;
   
   /* Data que a agenda foi fechada para marcacoes */
-  private Calendar dataFechamento;
-  
-  
+  private LocalDateTime dataFechamento;
+    
   /*Lista de disponibilidade dos profissionais na data*/
   private List<Disponibilidade> disponibilidades;
 
-
-public Long getId() {
+public String getId() {
 	return id;
 }
 
-
-public void setId(Long id) {
+public void setId(String id) {
 	this.id = id;
 }
 
-
-public Calendar getData() {
+public LocalDate getData() {
 	return data;
 }
 
-
-public void setData(Calendar data) {
+public void setData(LocalDate data) {
 	this.data = data;
 }
 
-
-public String getHoraInicial() {
+public LocalTime getHoraInicial() {
 	return horaInicial;
 }
 
-
-public void setHoraInicial(String horaInicial) {
+public void setHoraInicial(LocalTime horaInicial) {
 	this.horaInicial = horaInicial;
 }
 
-
-public String getHoraFinal() {
+public LocalTime getHoraFinal() {
 	return horaFinal;
 }
 
-
-public void setHoraFinal(String horaFinal) {
+public void setHoraFinal(LocalTime horaFinal) {
 	this.horaFinal = horaFinal;
 }
 
-
-public Character getAberta() {
+public Integer getAberta() {
 	return aberta;
 }
 
-
-public void setAberta(Character aberta) {
+public void setAberta(Integer aberta) {
 	this.aberta = aberta;
 }
 
-
-public Calendar getDataAbertura() {
+public LocalDateTime getDataAbertura() {
 	return dataAbertura;
 }
 
-
-public void setDataAbertura(Calendar dataAbertura) {
+public void setDataAbertura(LocalDateTime dataAbertura) {
 	this.dataAbertura = dataAbertura;
 }
 
-
-public Calendar getDataFechamento() {
+public LocalDateTime getDataFechamento() {
 	return dataFechamento;
 }
 
-
-public void setDataFechamento(Calendar dataFechamento) {
+public void setDataFechamento(LocalDateTime dataFechamento) {
 	this.dataFechamento = dataFechamento;
 }
-
 
 public List<Disponibilidade> getDisponibilidades() {
 	return disponibilidades;
 }
 
-
 public void setDisponibilidades(List<Disponibilidade> disponibilidades) {
 	this.disponibilidades = disponibilidades;
 }
 
+@Override
+public String toString() {
+	return "Agenda [id=" + id + ", data=" + data + ", horaInicial=" + horaInicial + ", horaFinal=" + horaFinal
+			+ ", aberta=" + aberta + ", dataAbertura=" + dataAbertura + ", dataFechamento=" + dataFechamento
+			+ ", disponibilidades=" + disponibilidades + "]";
+}
 
 @Override
 public int hashCode() {
 	return Objects.hash(aberta, data, dataAbertura, dataFechamento, disponibilidades, horaFinal, horaInicial, id);
 }
-
 
 @Override
 public boolean equals(Object obj) {
@@ -132,13 +127,12 @@ public boolean equals(Object obj) {
 		return false;
 	if (getClass() != obj.getClass())
 		return false;
-	Agenda other = (Agenda) obj;
+	Agendamento other = (Agendamento) obj;
 	return Objects.equals(aberta, other.aberta) && Objects.equals(data, other.data)
 			&& Objects.equals(dataAbertura, other.dataAbertura) && Objects.equals(dataFechamento, other.dataFechamento)
 			&& Objects.equals(disponibilidades, other.disponibilidades) && Objects.equals(horaFinal, other.horaFinal)
 			&& Objects.equals(horaInicial, other.horaInicial) && Objects.equals(id, other.id);
 }
-
 
 
 }
