@@ -6,6 +6,8 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.mongodb.lang.NonNull;
+
 @Document("profissional")
 public class Profissional {
 
@@ -13,12 +15,15 @@ public class Profissional {
 	private String id;
 	
 	/* Nome do professional*/
+	
 	private String nome;
 	
 	/* Funcao que o profissional exerce*/
+	
 	private String funcao;
 	
 	/* CPF do professional*/
+	
 	private String cpf;
 	
 	/* Data que o profisisonal foi incluído no sistema */
@@ -29,9 +34,11 @@ public class Profissional {
 	private LocalDateTime dataExclusao;
 	
 	/*Login  do funcionario*/
+	@NonNull
 	private String login;
 	
 	/* Senha do funcionario*/
+	@NonNull
 	private String senha;
 	
 	public String getId() {

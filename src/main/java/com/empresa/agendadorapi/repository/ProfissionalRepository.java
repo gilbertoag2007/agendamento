@@ -52,4 +52,42 @@ public class ProfissionalRepository {
 		return profissional;
 	}
 	
+	public List<Profissional> pesquisarPorCPF(String cpf) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("cpf").is(cpf));
+		List<Profissional> listaProf = mongoTemplate.find(query, Profissional.class);
+		return listaProf;
+	}
+	
+	public List<Profissional> pesquisarPorNome(String nome) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("nome").is(nome));
+		List<Profissional> listaProf = mongoTemplate.find(query, Profissional.class);
+		return listaProf;
+	}
+	
+	public Long loginExiste(String login, String id) {
+		Query query = new Query();
+		
+		if (id != null) {
+			query.addCriteria(Criteria.where("login").is(login).and("id").ne(id));
+		}else {
+			query.addCriteria(Criteria.where("login").is(login));
+		}
+		
+		return mongoTemplate.count(query, Profissional.class);
+	}
+	
+	public Long cpfExiste(String cpf, String id) {
+		Query query = new Query();
+		
+		if (id != null) {
+			query.addCriteria(Criteria.where("login").is(cpf).and("id").ne(id));
+		}else {
+			query.addCriteria(Criteria.where("login").is(cpf));
+		}
+		
+		return mongoTemplate.count(query, Profissional.class);
+	}
+	
 }

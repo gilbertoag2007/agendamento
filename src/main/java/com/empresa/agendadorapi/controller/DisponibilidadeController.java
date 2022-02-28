@@ -2,6 +2,8 @@ package com.empresa.agendadorapi.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +28,7 @@ public class DisponibilidadeController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public DisponibilidadeDTO incluirDisponibilidade(@RequestBody DisponibilidadeDTO dispoDTO) {
+	public DisponibilidadeDTO incluirDisponibilidade( @Valid @RequestBody DisponibilidadeDTO dispoDTO) {
 		
 		return disponibilidadeService.incluirDisponibilidade(dispoDTO);
 	}

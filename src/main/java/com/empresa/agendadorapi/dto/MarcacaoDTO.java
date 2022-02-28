@@ -1,39 +1,29 @@
-package com.empresa.agendadorapi.model;
+package com.empresa.agendadorapi.dto;
 
-import java.time.LocalTime;
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+public class MarcacaoDTO {
 
-/**
- * Classe com informações da marcacao de uma servico com um profissional.
- * 
- * @author Gilberto Cunha
- */
- @Document("marcacao")
-public class Marcacao {
-
-	@Id
 	private String id;
 	
 	/* Profissional que realizara a atividade*/
-	private Profissional Professional;
+	private ProfissionalDTO Professional;
 	
 	/*Nome do usuário a ser atendido*/
-	private Usuario usuario;
+	private UsuarioDTO usuario;
 	
 	/*Hora inicial do atendimento conforme marcacao*/
-	private LocalTime horaInicialPrev;
+	private String horaInicialPrev;
 	
 	/*Hora de termino do atendimento*/
-	private LocalTime HoraFinalPrev;
+	private String HoraFinalPrev;
 	
 	/*Hora real de inicio do atendimento */
-	private LocalTime horaInicialReal;
+	private String horaInicialReal;
 	
 	/*Hora real de término do a atendimento*/
-	private LocalTime HoraFinalReal;
+	private String HoraFinalReal;
+	
 	
 	private String observacao;
 
@@ -45,51 +35,51 @@ public class Marcacao {
 		this.id = id;
 	}
 
-	public Profissional getProfessional() {
+	public ProfissionalDTO getProfessional() {
 		return Professional;
 	}
 
-	public void setProfessional(Profissional professional) {
+	public void setProfessional(ProfissionalDTO professional) {
 		Professional = professional;
 	}
 
-	public Usuario getUsuario() {
+	public UsuarioDTO getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(UsuarioDTO usuario) {
 		this.usuario = usuario;
 	}
 
-	public LocalTime getHoraInicialPrev() {
+	public String getHoraInicialPrev() {
 		return horaInicialPrev;
 	}
 
-	public void setHoraInicialPrev(LocalTime horaInicialPrev) {
+	public void setHoraInicialPrev(String horaInicialPrev) {
 		this.horaInicialPrev = horaInicialPrev;
 	}
 
-	public LocalTime getHoraFinalPrev() {
+	public String getHoraFinalPrev() {
 		return HoraFinalPrev;
 	}
 
-	public void setHoraFinalPrev(LocalTime horaFinalPrev) {
+	public void setHoraFinalPrev(String horaFinalPrev) {
 		HoraFinalPrev = horaFinalPrev;
 	}
 
-	public LocalTime getHoraInicialReal() {
+	public String getHoraInicialReal() {
 		return horaInicialReal;
 	}
 
-	public void setHoraInicialReal(LocalTime horaInicialReal) {
+	public void setHoraInicialReal(String horaInicialReal) {
 		this.horaInicialReal = horaInicialReal;
 	}
 
-	public LocalTime getHoraFinalReal() {
+	public String getHoraFinalReal() {
 		return HoraFinalReal;
 	}
 
-	public void setHoraFinalReal(LocalTime horaFinalReal) {
+	public void setHoraFinalReal(String horaFinalReal) {
 		HoraFinalReal = horaFinalReal;
 	}
 
@@ -103,9 +93,9 @@ public class Marcacao {
 
 	@Override
 	public String toString() {
-		return "Marcacao [id=" + id + ", Professional=" + Professional + ", usuario=" + usuario + ", horaInicialPrev="
-				+ horaInicialPrev + ", HoraFinalPrev=" + HoraFinalPrev + ", horaInicialReal=" + horaInicialReal
-				+ ", HoraFinalReal=" + HoraFinalReal + ", observacao=" + observacao + "]";
+		return "MarcacaoDTO [id=" + id + ", Professional=" + Professional + ", usuario=" + usuario
+				+ ", horaInicialPrev=" + horaInicialPrev + ", HoraFinalPrev=" + HoraFinalPrev + ", horaInicialReal="
+				+ horaInicialReal + ", HoraFinalReal=" + HoraFinalReal + ", observacao=" + observacao + "]";
 	}
 
 	@Override
@@ -122,7 +112,7 @@ public class Marcacao {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Marcacao other = (Marcacao) obj;
+		MarcacaoDTO other = (MarcacaoDTO) obj;
 		return Objects.equals(HoraFinalPrev, other.HoraFinalPrev) && Objects.equals(HoraFinalReal, other.HoraFinalReal)
 				&& Objects.equals(Professional, other.Professional)
 				&& Objects.equals(horaInicialPrev, other.horaInicialPrev)
@@ -131,4 +121,5 @@ public class Marcacao {
 	}
 
 	
+
 }

@@ -14,12 +14,18 @@ import org.springframework.stereotype.Component;
 
 import com.empresa.agendadorapi.dto.AgendamentoDTO;
 import com.empresa.agendadorapi.dto.DisponibilidadeDTO;
+import com.empresa.agendadorapi.dto.MarcacaoDTO;
 import com.empresa.agendadorapi.dto.ProfissionalDTO;
+import com.empresa.agendadorapi.dto.UsuarioDTO;
 import com.empresa.agendadorapi.model.Agendamento;
 import com.empresa.agendadorapi.model.Disponibilidade;
+import com.empresa.agendadorapi.model.Marcacao;
 import com.empresa.agendadorapi.model.Profissional;
+import com.empresa.agendadorapi.model.Usuario;
 import com.empresa.agendadorapi.repository.DisponibilidadeRepository;
 import com.empresa.agendadorapi.repository.ProfissionalRepository;
+import com.empresa.agendadorapi.repository.UsuarioRepository;
+import com.empresa.agendadorapi.utils.FormatadorDatas;
 
 /*
  * Classe responsavel por converter DTO em entidade e vice versa
@@ -34,6 +40,10 @@ public class MapeadorDtoImpl implements MapeadorDto {
 	@Autowired
 	DisponibilidadeRepository disponibilidadeRepository;
 	
+	@Autowired
+	UsuarioRepository usuarioRepository;
+	
+	
 	@Override
 	public Profissional profissionalDtoToProfissional(ProfissionalDTO dto) {
 		
@@ -43,20 +53,8 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		profissional.setCpf(dto.getCpf());
 		profissional.setLogin(dto.getLogin());
 		profissional.setSenha(dto.getSenha());
+		profissional.setDataInclusao(LocalDateTime.now());
 		
-		if (dto.getDataInclusao() == null || dto.getDataInclusao().isEmpty()) {
-			
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-			LocalDateTime agora = LocalDateTime.now();
-			agora.format(formatter);
-			
-			profissional.setDataInclusao(agora);
-		
-		}else {
-			profissional.setDataInclusao(LocalDateTime.parse(dto.getDataInclusao()));
-			
-		}
-			
 		return profissional;
 	}
 
@@ -69,12 +67,13 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		dto.setCpf(prof.getCpf());
 		dto.setLogin(prof.getLogin());
 		dto.setSenha(prof.getSenha());
-		dto.setDataInclusao(String.valueOf(prof.getDataInclusao()));
-		dto.setDataExclusao(String.valueOf(prof.getDataExclusao()));
+		dto.setDataInclusao(FormatadorDatas.localDateTimeParaString(prof.getDataInclusao()));
+		dto.setDataExclusao(FormatadorDatas.localDateTimeParaString(prof.getDataExclusao()));
 		
 		return dto;
 	}
 
+	
 	@Override
 	public Disponibilidade disponibilidadeDtoToDisponibilidade(DisponibilidadeDTO dto) {
 		Disponibilidade dispo = new Disponibilidade();
@@ -110,10 +109,11 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		DisponibilidadeDTO dto = new DisponibilidadeDTO();
 		dto.setId(disponibilidade.getId());
 		dto.setFuncao(disponibilidade.getFuncao());
+		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		String dataFormatada = formatter.format(disponibilidade.getDataDisponibilidade());
-		
 		dto.setDataDisponibilidade(dataFormatada);
+		
 		dto.setHoraInicial(String.valueOf(disponibilidade.getHoraInicial()));
 		dto.setHoraFinal(String.valueOf(disponibilidade.getHoraFinal()));
 		dto.setIntervaloMinutos(disponibilidade.getIntervaloMinutos());
@@ -214,6 +214,104 @@ public class MapeadorDtoImpl implements MapeadorDto {
 		
 		return dto;
 	}
+
+	@Override
+	public Usuario usuarioDtoToUsuario(UsuarioDTO dto) {
+			
+		Usuario usuario = new Usuario();
+		usuario.setId(dto.getId());
+		usuario.setNome(dto.getNome());
+		usuario.setIdade(Integer.valueOf(dto.getIdade()));
+		usuario.setCpf(dto.getCpf());
+		usuario.setResponsavel(dto.getResponsavel());
+		usuario.setEmail(dto.getEmail());
+		usuario.setTelefone(dto.getTelefone());
+		usuario.setObservacao(dto.getObservacao());
+		
+		return usuario;
+	}
+
+	@Override
+	public UsuarioDTO usuarioToUsuarioDto(Usuario usuario) {
+		
+		UsuarioDTO dto = new UsuarioDTO();
+		dto.setId(usuario.getId());
+		dto.setNome(usuario.getNome());
+		dto.setIdade(usuario.getIdade());
+		dto.setCpf(usuario.getCpf());
+		dto.setResponsavel(usuario.getResponsavel());
+		dto.setEmail(usuario.getEmail());
+		dto.setTelefone(usuario.getTelefone());
+		dto.setObservacao(usuario.getObservacao());
+		
+		return dto;
+	}
+
+	@Override
+	public Marcacao marcacaoDtoToMarcacao(MarcacaoDTO dto) {
+		
+		Marcacao marcacao = new Marcacao();
+		marcacao.setId(dto.getId());
+		
+		if(dto.getUsuario() != null) {
+			Usuario usuario  = usuarioRepository.pesquisarPorId(dto.getUsuario().getId());
+			marcacao.setUsuario(usuario);
+		}
+		
+		if(dto.getProfessional() != null) {
+			Profissional profissional =  profissionalRepository.pesquisarPorId(dto.getProfessional().getId());
+			marcacao.setProfessional(profissional);
 	
+		}
+		
+		if(dto.getHoraInicialPrev() != null) {
+			marcacao.setHoraInicialPrev(LocalTime.parse(dto.getHoraInicialPrev()));
+		}
+		
+		if (dto.getHoraFinalPrev() != null) {
+			marcacao.setHoraFinalPrev(LocalTime.parse(dto.getHoraFinalPrev()));
+		}
+		
+		if(dto.getHoraInicialReal() != null) {
+			marcacao.setHoraInicialReal(LocalTime.parse(dto.getHoraInicialReal()));
+		
+		}
+		if (dto.getHoraFinalReal() != null) {
+			marcacao.setHoraFinalReal(LocalTime.parse(dto.getHoraFinalReal()));
+		}
+		
+		marcacao.setObservacao(dto.getObservacao());
+		
+		return marcacao;
+	}
+
+	@Override
+	public MarcacaoDTO marcacaoToMarcacaoDto(Marcacao marcacao) {
+		
+		MarcacaoDTO dto = new MarcacaoDTO();
+		dto.setId(marcacao.getId());
+		
+		if (marcacao.getUsuario() != null) {
+			
+			UsuarioDTO usuarioDTO = usuarioToUsuarioDto(marcacao.getUsuario());
+			dto.setUsuario(usuarioDTO);
+		}
+		
+		if (marcacao.getProfessional() != null) {
+			
+			ProfissionalDTO profissionalDTO = profissionalToProfissionalDto(marcacao.getProfessional());
+			dto.setProfessional(profissionalDTO);
+		}
+		
+		dto.setHoraInicialPrev(String.valueOf(marcacao.getHoraInicialPrev()));
+		dto.setHoraFinalPrev(String.valueOf(marcacao.getHoraFinalPrev()));
+		dto.setHoraInicialReal(String.valueOf(marcacao.getHoraFinalPrev()));
+		dto.setHoraFinalReal(String.valueOf(marcacao.getHoraFinalReal()));
+		dto.setObservacao(marcacao.getObservacao());
+		
+		return dto;
+	}
+
+
 	
 }

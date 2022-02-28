@@ -2,8 +2,6 @@ package com.empresa.agendadorapi.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,50 +14,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.empresa.agendadorapi.dto.ProfissionalDTO;
-import com.empresa.agendadorapi.service.ProfissionalService;
+import com.empresa.agendadorapi.dto.MarcacaoDTO;
+import com.empresa.agendadorapi.service.MarcacaoService;
 
 @RestController
-@RequestMapping("/profissionais")
-public class ProfissionalController {
-	
+@RequestMapping("/marcacoes")
+public class MarcacaoController {
+
 	@Autowired
-	ProfissionalService profissionalService;
+	MarcacaoService marcacaoService;
+	
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ProfissionalDTO incluirProfissional( @Valid @RequestBody ProfissionalDTO profDTO) {
-		return profissionalService.incluirProfissional(profDTO);
+	public MarcacaoDTO incluirMarcacao(@RequestBody MarcacaoDTO marcacaoDTO) {
+		
+		return marcacaoService.incluirMarcacao(marcacaoDTO);
 	}
 	
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProfissionalDTO> listarTodos(){
+	public List<MarcacaoDTO> listarTodos(){
 
-		return profissionalService.listarTodos();
-		
+		return marcacaoService.listarTodos();
 	}
 	
 	@PutMapping
 	@ResponseStatus(HttpStatus.OK)
-	public void atualizarProfissional(@RequestBody ProfissionalDTO profDTO) {
+	public void atualizarMarcacao(@RequestBody MarcacaoDTO marcacaoDTO) {
 	
-		profissionalService.atualizarProfissional(profDTO);
+		marcacaoService.atualizarMarcacao(marcacaoDTO);
 	}
 	
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public void deletar(@PathVariable String id) {
-		profissionalService.deletarProfisisonal(id);
-	
+		
+		marcacaoService.deletarMarcacao(id);
 	}
 	
 	@GetMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.FOUND)
-	public ProfissionalDTO pesquisarPorId(@PathVariable String id) {
-		ProfissionalDTO dto = profissionalService.pesquisarPorId(id);
+	@ResponseStatus(HttpStatus.OK)
+	public MarcacaoDTO pesquisarPorId(@PathVariable String id) {
 		
-		return dto;
+		return marcacaoService.pesquisarPorId(id);
 	}
-		
+	
+	
+	
+	
+	
+	
 }

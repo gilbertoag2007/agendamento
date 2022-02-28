@@ -2,23 +2,35 @@ package com.empresa.agendadorapi.dto;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotBlank;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CPF;
+
 public class ProfissionalDTO {
 	
 	private String id;
 	
 	/* Nome do professional*/
+	@NotBlank(message = "O nome do profissional e obrigatorio.")
+	@Length(max = 150, message = "O nome de ter no maximo 150 caracteres")
 	private String nome;
 		
 	/* CPF do professional*/
+	@CPF(message = "O CPF informado e invalido.")
 	private String cpf;
 	
 	/* login do usuario */
+	@NotBlank
+	@Length(min= 6, max = 15, message = "O login de ter entre 6 e 15 caracteres")
 	private String login;
 	
 	/* senha do usuario */
+	@NotBlank
+	@Length(min= 6, max = 10, message = "A senha de ter entre 6 e 15 caracteres")
 	private String senha;
 
-	/*data de inclusao do funcionario*/
+	/* data de inclusao do profissional*/
 	private String dataInclusao;
 	
 	/* data exclusao funcionario*/
